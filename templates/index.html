@@ -1,21 +1,56 @@
 <!DOCTYPE html>
 <head>
+  <meta charset="utf-8">
   <title>OpenAI Quickstart</title>
-  <link
-    rel="shortcut icon"
-    href="{{ url_for('static', filename='dog.png') }}"
-  />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='dog.png') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 </head>
 
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
-  <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
-  </form>
-  {% if result %}
-  <div class="result">{{ result }}</div>
+
+  <div class="head">
+    <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
+    <div class="line">
+      <button type="button" class="btn" onclick="presetModel(this)">text</button>
+      <button type="button" class="btn" onclick="presetModel(this)">java</button>
+      <button type="button" class="btn" onclick="presetModel(this)">python</button>
+      <button type="button" class="btn" onclick="presetModel(this)">js</button>
+    </div>
+    <form action="/" method="post">
+      <textarea name="query" id="query" placeholder="вопросик" required></textarea>
+      <input type="hidden" class="hidden" name="model" value="text"/>
+      <input type="submit" value="Go!" />
+    </form>
+  </div>
+  {% if query %}
+  <div class="query">{{ query }}</div>
   {% endif %}
+  {% if result %}
+  <div id="hidden">{{ result }}</div>
+  <textarea id="result"></textarea>
+  <script>
+    function auto_grow(element) {
+      element.style.height = (element.scrollHeight)+"px";
+    }
+    function presetModel(element){
+      document.getElementsByClassName('hidden')[0].value=element.innerHTML;
+      document.querySelectorAll('button').forEach(el => el.classList.remove('act'));
+      element.classList.add('act');
+    }
+    var text = document.getElementById("hidden");
+    var result = document.getElementById("result");
+    var query = document.getElementById("query");
+    var p = text.innerHTML.replace(". ",".\n");
+    p += "\n\n";
+    result.value = p;
+    query.focus();
+    auto_grow(result);
+    const textarea = document.querySelector('textarea');
+    textarea.oninput = function(event) {
+      event.target.style.height = "0px";
+      event.target.style.height = (event.target.scrollHeight)+"px";
+    }
+  </script>
+  {% endif %}
+
 </body>
