@@ -1,56 +1,87 @@
 <!DOCTYPE html>
-<head>
-  <meta charset="utf-8">
-  <title>OpenAI Quickstart</title>
-  <link rel="shortcut icon" href="{{ url_for('static', filename='dog.png') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-</head>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width, height=device-height, shrink-to-fit=no" />
+    <title>OpenAI APress-Test</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='dog.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  </head>
 
-<body>
+  <body>
+    <div class="container">
+      <div class="head">
+        <div class="line">
+          <button type="button" class="btn act" onclick="presetModel(this)">text</button>
+          <button type="button" class="btn" onclick="presetModel(this)">java</button>
+          <button type="button" class="btn" onclick="presetModel(this)">python</button>
+          <button type="button" class="btn" onclick="presetModel(this)">js</button>
+          <button type="button" class="btn" onclick="presetModel(this)">img</button>
+        </div>
+        <form action="/" method="post">
+          <textarea name="query" id="query" placeholder="вопросик" required></textarea>
+          <input type="hidden" name="model" value="text"/>
+          <input type="submit" value="Go!" />
+        </form>  
 
-  <div class="head">
-    <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-    <div class="line">
-      <button type="button" class="btn" onclick="presetModel(this)">text</button>
-      <button type="button" class="btn" onclick="presetModel(this)">java</button>
-      <button type="button" class="btn" onclick="presetModel(this)">python</button>
-      <button type="button" class="btn" onclick="presetModel(this)">js</button>
+        {% if query %}
+        <div class="query" onclick="cloneText(this)">{{ query }}</div>
+        {% endif %}
+        
+        {% if result %}
+        <div class="line" style="justify-content: flex-end;"><button type="button" class="btn copy" onclick="copyClipBoard()">copy</button></div>
+        <textarea id="result"></textarea>
+      </div>
+      <div id="hidden">{{ result }}</div>
+        {% else %}
+      </div>
+      <div id="hidden">img</div>
+      <img src='{{ link }}' id="result" class="result">
+        {% endif %}
+      
     </div>
-    <form action="/" method="post">
-      <textarea name="query" id="query" placeholder="вопросик" required></textarea>
-      <input type="hidden" class="hidden" name="model" value="text"/>
-      <input type="submit" value="Go!" />
-    </form>
-  </div>
-  {% if query %}
-  <div class="query">{{ query }}</div>
-  {% endif %}
-  {% if result %}
-  <div id="hidden">{{ result }}</div>
-  <textarea id="result"></textarea>
-  <script>
-    function auto_grow(element) {
-      element.style.height = (element.scrollHeight)+"px";
-    }
-    function presetModel(element){
-      document.getElementsByClassName('hidden')[0].value=element.innerHTML;
-      document.querySelectorAll('button').forEach(el => el.classList.remove('act'));
-      element.classList.add('act');
-    }
-    var text = document.getElementById("hidden");
-    var result = document.getElementById("result");
-    var query = document.getElementById("query");
-    var p = text.innerHTML.replace(". ",".\n");
-    p += "\n\n";
-    result.value = p;
-    query.focus();
-    auto_grow(result);
-    const textarea = document.querySelector('textarea');
-    textarea.oninput = function(event) {
-      event.target.style.height = "0px";
-      event.target.style.height = (event.target.scrollHeight)+"px";
-    }
-  </script>
-  {% endif %}
+    
+    <script>
+      
+      function auto_grow(element) {
+        element.style.height = "0px";
+        element.style.height = (element.scrollHeight)+"px";
+      }
+      
+      function presetModel(element){
+        document.querySelector('input[type="hidden"]').value=element.innerHTML;
+        document.querySelectorAll('button').forEach(el => el.classList.remove('act'));
+        element.classList.add('act');
+      }
+      
+      function cloneText(element){
+        document.getElementById("query").value=element.innerHTML;
+        element.style.height = (element.scrollHeight)+"px";
+      }
+      
+      function copyClipBoard() {
+        var Text = document.getElementById("result");
+        Text.select();
+        navigator.clipboard.writeText(Text.value);
+      }
 
-</body>
+      var text = document.getElementById("hidden");
+      var query = document.getElementById("query");
+      var p = text.innerHTML.replace(". ",".\n");
+      var result;
+
+      if (p != "img") {
+        result = document.getElementById("result");
+        p = p.replace(/&amp;/g, "&").replace(/\&[gG][tT];/g, '>').replace(/\&[lL][tT];/g, '<')
+        p += "\n\n";
+        result.value = p;
+        auto_grow(result);
+      }
+
+      query.focus();
+      const textarea = document.querySelectorAll('textarea');
+      textarea.forEach(el => {el.oninput = function(event) { auto_grow(event.target) }})
+    </script>
+      
+    </div>
+  </body>
+</html>
