@@ -27,14 +27,12 @@ def index():
             response = openai.Image.create(
             prompt=q,
             n=1,
-            size="512x512"
+            size="1024x1024"
             )
             link = str(response['data'][0]['url'])       
-            print("URL =======\n"+link)
             return render_template("index.html", query=q, link=link)
 
         else:
-            print(m + " =======")
             response = openai.Completion.create(
             model=model[m]["model"],
             prompt=q,
@@ -50,3 +48,21 @@ def index():
     result = request.args.get("result")
     q = request.args.get("query")
     return render_template("index.html", query=q, result=result)
+
+
+# 1. style: Этот параметр позволяет использовать нейронную сеть для применения стиля к изображению. 
+# Это позволяет применить стиль к изображению, как если бы он был нарисован вручную.
+# Параметр style в запросе openai.Image.create может принимать следующие значения:
+# - «Cartoon» — применяет картонный стиль к изображению;
+# - «Realistic» — применяет реалистичный стиль к изображению;
+# - «Abstract» — применяет абстрактный стиль к изображению;
+# - «Mosaic» — применяет мозаичный стиль к изображению.
+
+# 2. content_image: Этот параметр позволяет задать изображение, которое будет использоваться 
+# как основа для применения стиля.
+
+# 3. iterations: Этот параметр позволяет задать количество итераций нейронной сети, 
+# которое будет использоваться для применения стиля к изображению. 
+# Чем больше итераций, тем более точно будет применен стиль.
+
+# 4. output_image: Этот параметр позволяет задать имя файла для выходного изображения.

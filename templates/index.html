@@ -18,25 +18,48 @@
           <button type="button" class="btn" onclick="presetModel(this)">img</button>
         </div>
         <form action="/" method="post">
+          <div class="addedSet line hidden">
+            <span class="label">модель:
+              <select name="style">
+                <option value="Cartoon">Cartoon</option>
+                <option value="Realistic">Realistic</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Mosaic">Mosaic</option>
+              </select>
+            </span>
+            <span class="label">сколько шт.:
+              <select name="Pics" class="settings"></select>
+            </span>
+            <span class="label">мощность:
+              <select name="Deep" class="settings"></select>
+            </span>
+            <span class="label">загр. образец
+              <button type="button" class="btn" onclick="presetModel(this)">upload</button>
+            </span>
+          </div>
+          
+          
           <textarea name="query" id="query" placeholder="вопросик" required></textarea>
           <input type="hidden" name="model" value="text"/>
           <input type="submit" value="Go!" />
         </form>  
 
-        {% if query %}
-        <div class="query" onclick="cloneText(this)">{{ query }}</div>
-        {% endif %}
+      {% if query %}
+      <div class="query" onclick="cloneText(this)">{{ query }}</div>
+      {% endif %}
         
-        {% if result %}
-        <div class="line" style="justify-content: flex-end;"><button type="button" class="btn copy" onclick="copyClipBoard()">copy</button></div>
-        <textarea id="result"></textarea>
+      {% if result %}
+      <div class="top-layer" style="justify-content: flex-end;">
+        <button type="button" class="btn copy" onclick="copyClipBoard(this)">copy</button>
+      </div>
+      <textarea id="result"></textarea>
       </div>
       <div id="hidden">{{ result }}</div>
-        {% else %}
+      {% else %}
+      <img src="{{ link }}" id="result" class="result">
       </div>
       <div id="hidden">img</div>
-      <img src='{{ link }}' id="result" class="result">
-        {% endif %}
+      {% endif %}
       
     </div>
     
@@ -51,6 +74,9 @@
         document.querySelector('input[type="hidden"]').value=element.innerHTML;
         document.querySelectorAll('button').forEach(el => el.classList.remove('act'));
         element.classList.add('act');
+        if (element.innerHTML=="img") {
+          document.querySelector(".addedSet").classList.remove("hidden")
+        } else {document.querySelector(".addedSet").classList.add("hidden")}
       }
       
       function cloneText(element){
@@ -58,35 +84,32 @@
         element.style.height = (element.scrollHeight)+"px";
       }
       
-      function copyClipBoard() {
-        var element = document.getElementById("result");
-        window.getSelection().removeAllRanges();
-        let range = document.createRange();
-        range.selectNode(element);
-        window.getSelection().addRange(range);
-        document.execCommand('copy');
-        window.getSelection().removeAllRanges();
-      }
-        // Text.select();
-        // navigator.clipboard.writeText(Text.value);
-      
+      function copyClipBoard(element) {
+        navigator.clipboard.writeText(textResult);
+        element.innerHTML("ok")
+      } 
 
-      var text = document.getElementById("hidden");
+      var textResult = document.getElementById("hidden").innerHTML.replace(". ",".\n");
       var query = document.getElementById("query");
-      var p = text.innerHTML.replace(". ",".\n");
-      var result;
+      var result = document.getElementById("result");
 
-      if (p != "img") {
-        result = document.getElementById("result");
-        p = p.replace(/&amp;/g, "&").replace(/\&[gG][tT];/g, '>').replace(/\&[lL][tT];/g, '<')
-        p += "\n\n";
-        result.value = p;
+      if (textResult != "img") {
+        textResult = textResult.replace(/&amp;/g, "&").replace(/\&[gG][tT];/g, '>').replace(/\&[lL][tT];/g, '<')
+        textResult += "\n\n";
+        result.value = textResult;
         auto_grow(result);
       }
 
       query.focus();
       const textarea = document.querySelectorAll('textarea');
       textarea.forEach(el => {el.oninput = function(event) { auto_grow(event.target) }})
+      const settings = document.querySelectorAll('.settings');
+      settings.forEach(el => {for (var i=1; i<10; i++) {
+        option = document.createElement("option");
+        option.value =  option.text = i;
+        el.appendChild(option)
+      }})
+
     </script>
       
     </div>

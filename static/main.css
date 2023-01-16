@@ -13,12 +13,18 @@
   font-weight: bold;
   font-style: normal;
 }
-body,
-input {
-  font-size: 16px;
+* {
   color: #333;
   font-family: "ColfaxAI", Helvetica, sans-serif;
 }
+
+input, textarea {
+  font-size: 14px;
+}
+.btn, select {
+  font-size: 13px;
+}
+
 body {
   display: block;
   position: relative;
@@ -35,7 +41,7 @@ body {
   align-items: center;
   height:100%;
   width: 100%;
-  max-width: 980px !important;
+  z-index: 4;
 }
 .head {
   height: fit-content;
@@ -43,7 +49,7 @@ body {
   flex-direction: column;
   align-items: center;
   align-self: center;
-  background-color: #fff;
+  margin-top: 20px;
 }
 .icon {
   width: 34px;
@@ -57,7 +63,9 @@ h3 {
 form {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
+
 textarea {
   border: 2px solid #999;
   resize: none;
@@ -78,9 +86,17 @@ input[type="submit"] {
   text-align: center;
   cursor: pointer;
   border-radius: 4px;
+  width: 320px;
 }
 input[type="submit"]:hover{
   background-color: #666;
+}
+select{
+  display: flex;
+  text-align: center;
+  padding: 0 5px;
+  height: 32px;
+  border-radius: 4px;
 }
 #result, #query {
   resize: none;
@@ -92,27 +108,32 @@ img.result {
   width: 100% !important;
   max-width: 1024px !important;
 }
-#hidden{
-  display: none;
-}
 
-.line{
+.line, .top-layer, .subset{
   display: inline-flex;
   justify-content: space-between;
   flex-flow: row nowrap;
+  z-index: 5;
+}
+
+.top-layer{
+  justify-content: right;
+  width: 100%;
+}
+.label{
+  font-size: 10px;
+  line-height: 20px;
+  color: #666;
 }
 .btn{
   display: flex;
   text-align: center;
-  margin-bottom: 10px;
-  margin-top: 20px;
   padding: 8px 15px;
+  border-radius: 4px;
   color: #fff;
   background-color: #999;
   border: none;
-  text-align: center;
   cursor: pointer;
-  border-radius: 4px;
 }
 .btn:hover{
   background-color: #666;
@@ -121,7 +142,7 @@ img.result {
   display: flex;
   margin: 0;
   align-self: flex-end;
-  margin-bottom: -30px;
+  margin-bottom: -32px;
   z-index: 5;
 }
 .act{
@@ -132,23 +153,35 @@ img.result {
   margin-bottom: 20px;
   color: #c7001c;
   word-break: break-word;
+  cursor: pointer;
 }
-.head, textarea, form, input, .line, .query
-#hidden, #query{
+.head, form, .query, #hidden, #query{
   width: 100%;
   max-width: 980px;
 }
 #result, textarea {
   width: 100%;
-  max-width: 972px;
+  max-width: 972px !important;
+}
+.line {
+  width: 320px;
+  max-width: 320px;
+  margin-bottom: 20px;
+}
+.addedSet{
+  filter: opacity(0.5);
+}
+#hidden, .hidden{
+  display: none;
 }
 
+
 @media (max-width: 400px) {
-  .container {
+  /* .container {
     width: 320px;
     max-width: 320px !important;
-  }
-  .head, textarea, form, input, .line, .query, #hidden, #query{
+  } */
+  .head, textarea, form, .query, #hidden, #query{
     width: 320px;
     max-width: 320px;
   }
