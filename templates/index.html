@@ -59,10 +59,17 @@
       }
       
       function copyClipBoard() {
-        var Text = document.getElementById("result");
-        Text.select();
-        navigator.clipboard.writeText(Text.value);
+        var element = document.getElementById("result");
+        window.getSelection().removeAllRanges();
+        let range = document.createRange();
+        range.selectNode(element);
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
       }
+        // Text.select();
+        // navigator.clipboard.writeText(Text.value);
+      
 
       var text = document.getElementById("hidden");
       var query = document.getElementById("query");
